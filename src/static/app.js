@@ -27,11 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
           <p><strong>Current Participants:</strong></p>
           ${details.participants.length > 0 
-            ? `<ul style="margin-top: 10px; padding-left: 0; list-style-type: none;">${details.participants.map(email => `<li style="margin-bottom: 5px; color: #333; display: flex; justify-content: space-between; align-items: center;">${email} <span onclick="unregister('${name}', '${email}')" style="cursor: pointer; color: red; font-weight: bold; margin-left: 10px;" title="Unregister">&times;</span></li>`).join('')}</ul>`
-            : '<p style="margin-top: 10px; font-style: italic; color: #666;">No participants yet.</p>'}
+            ? `<ul class="participants-list">${details.participants.map(email => `<li class="participant-item">${email} <span class="delete-participant" data-email="${email}" title="Unregister">&times;</span></li>`).join('')}</ul>`
+            : '<p class="no-participants">No participants yet.</p>'}
         `;
 
         activitiesList.appendChild(activityCard);
+
+        // Attach event listeners to delete buttons
+        activityCard.querySelectorAll('.delete-participant').forEach(span => {
+          span.addEventListener('click', () => unregister(name, span.dataset.email));
+        });
 
         // Add option to select dropdown
         const option = document.createElement("option");
